@@ -837,7 +837,7 @@ function renderSheet() {
   const f = figures.find(x => x.id === sheetId);
   if (!f) { closeSheet(); return; }
   const cover = (f.images && f.images[0]) || '';
-  const photos = f.images || [];
+  const extra = (f.images || []).slice(1);
   document.getElementById('sheet-panel').innerHTML = `
     <button class="icon-button sheet-close" onclick="closeSheet()" aria-label="Close details">
       <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
@@ -854,18 +854,18 @@ function renderSheet() {
         ${isSecret(f) ? `<span>Secret edition</span>` : ''}
       </div>
       ${f.notes ? `<p class="detail-notes">${esc(f.notes)}</p>` : ''}
-      <div class="photo-heading"><h3>Photos <span>${photos.length}</span></h3></div>
-      ${photos.length ? `
-        <div class="photo-grid">${photos.map((p, i) => `
-          <div class="photo-tile"><img src="${esc(p)}" alt="${esc(f.character)}, photo ${i + 1}" loading="lazy" data-name="${esc(f.character)}" onerror="imgFallback(this)">
-            <button aria-label="Remove photo ${i + 1}" onclick="removePhoto('${f.id}', ${i})">
+      <div class="photo-heading"><h3>Photos <span>${extra.length}</span></h3></div>
+      ${extra.length ? `
+        <div class="photo-grid">${extra.map((p, i) => `
+          <div class="photo-tile"><img src="${esc(p)}" alt="${esc(f.character)}, photo ${i + 2}" loading="lazy" data-name="${esc(f.character)}" onerror="imgFallback(this)">
+            <button aria-label="Remove photo ${i + 2}" onclick="removePhoto('${f.id}', ${i + 1})">
               <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
             </button>
           </div>`).join('')}
         </div>` : `
         <div class="photo-empty">
           <svg viewBox="0 0 24 24"><path d="M4 8h4l1.5-2h5L16 8h4v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-          <p>No photos yet. Paste an image link below once the photos arrive.</p>
+          <p>${cover ? 'Cover photo shown above. Add more photos below.' : 'No photos yet. Paste an image link below once the photos arrive.'}</p>
         </div>`}
       <div class="photo-add">
         <input type="url" id="photo-url" placeholder="https://… image link" autocomplete="off">
