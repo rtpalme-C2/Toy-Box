@@ -260,6 +260,8 @@ main { width: min(1180px, 100%); margin: 0 auto; padding: 0 0 80px; }
 @media (min-width: 980px) {
   .figure-art > span { font-size: 4.2rem; }
 }
+.linklike{background:none;border:none;color:#8a6d3b;cursor:pointer;text-decoration:underline;font:inherit;padding:0}
+.linklike:hover{color:#6d562e}
 </style>
 </head>
 <body>
@@ -865,7 +867,7 @@ function renderSheet() {
         </div>` : `
         <div class="photo-empty">
           <svg viewBox="0 0 24 24"><path d="M4 8h4l1.5-2h5L16 8h4v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-          <p>${cover ? 'Cover photo shown above. Add more photos below.' : 'No photos yet. Paste an image link below once the photos arrive.'}</p>
+          <p>${cover ? `Cover photo shown above. <button class="linklike" onclick="removeCover('${f.id}')">Remove cover photo</button><br>Add more photos below.` : 'No photos yet. Paste an image link below once the photos arrive.'}</p>
         </div>`}
       <div class="photo-add">
         <input type="url" id="photo-url" placeholder="https://… image link" autocomplete="off">
@@ -889,9 +891,16 @@ function addPhoto(id) {
   const f = figures.find(x => x.id === id);
   if (!f) return;
   if (!Array.isArray(f.images)) f.images = [];
-  f.images.push(url);
+  f.images.unshift(url);
   scheduleSave(); renderGrid(); renderPills(); renderSheet();
   showToast('Photo added.');
+}
+function removeCover(id) {
+  const f = figures.find(x => x.id === id);
+  if (!f || !Array.isArray(f.images) || !f.images.length) return;
+  f.images.shift();
+  scheduleSave(); renderGrid(); renderPills(); renderSheet();
+  showToast('Cover photo removed.');
 }
 function removePhoto(id, idx) {
   const f = figures.find(x => x.id === id);
