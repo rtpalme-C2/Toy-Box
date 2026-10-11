@@ -134,19 +134,43 @@ main { width: min(1180px, 100%); margin: 0 auto; padding: 0 0 80px; }
 .search-wrap input { width: 100%; height: 44px; padding: 0 15px 0 43px; border: 1.5px solid var(--border); border-radius: 12px; background: #fff; font-size: .82rem; }
 .search-wrap input::placeholder { color: var(--dim); opacity: .9; }
 .search-wrap input:focus { border-color: var(--np-accent); outline: none; }
-.sort-wrap { display: flex; gap: 6px; align-items: center; }
-.sort-wrap .filter-select { max-width: 170px; }
-.filter-select { height: 44px; padding: 0 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; font-size: .78rem; }
+.ubar { display:flex; gap:10px; align-items:stretch; justify-content:center; margin-top:12px; }
+.ubar .ubtn { flex:none; display:flex; align-items:center; justify-content:center; gap:6px; height:44px; padding:0 16px; border-radius:20px; border:1.5px solid var(--np-thread); font-size:.9rem; background:#fff; color:var(--ink); font-weight:500; font-family:inherit; cursor:pointer; white-space:nowrap; }
+.ubar .ubtn .cnt { background:var(--np-main); color:#fff; font-size:.72rem; font-weight:700; min-width:22px; height:22px; border-radius:11px; display:inline-flex; align-items:center; justify-content:center; padding:0 6px; }
+.ubar .ubtn.add { background:var(--np-main); border-color:var(--np-main); color:#fff; font-weight:600; }
+
+.chips { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.chips:empty { display:none; }
+.chip { display:inline-flex; align-items:center; gap:6px; font-size:.8rem; padding:7px 8px 7px 14px; border-radius:20px; background:var(--np-mist); color:var(--np-deep); font-weight:500; }
+.chip button { border:none; background:var(--np-deep); color:#fff; width:20px; height:20px; border-radius:50%; font-size:.65rem; cursor:pointer; line-height:1; padding:0; }
+.sheet-backdrop { position:fixed; inset:0; background:rgba(44,56,64,.45); z-index:200; display:flex; align-items:flex-end; justify-content:center; }
+.sheet-backdrop[hidden] { display:none; }
+.sheet { width:100%; max-width:520px; background:#fff; border-radius:20px 20px 0 0; padding-bottom:max(18px, env(safe-area-inset-bottom)); animation:sheetUp .22s ease-out; }
+@keyframes sheetUp { from { transform:translateY(40px); opacity:.6; } to { transform:none; opacity:1; } }
+.sheet .sh-head { display:flex; justify-content:space-between; align-items:center; padding:18px 20px 6px; }
+.sheet .sh-head b { font-size:1.1rem; }
+.sheet .sh-x { border:none; background:none; font-size:1.6rem; color:var(--ink-soft); cursor:pointer; line-height:1; padding:4px 8px; }
+.sheet .sec { padding:10px 20px 4px; }
+.sheet .sec h5 { font-size:.7rem; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:8px; font-weight:600; }
+.sheet .opts { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.sheet .opt { height:44px; display:flex; align-items:center; justify-content:center; padding:0 6px; border-radius:20px; border:1.5px solid var(--np-thread); font-size:.85rem; background:#fff; cursor:pointer; font-family:inherit; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sheet .opt.on { background:var(--np-main); color:#fff; border-color:var(--np-main); outline:2px solid var(--ink); outline-offset:-2px; box-shadow:3px 3px 0 var(--brass); transform:translate(-1px,-1px); }
+.sheet .sh-foot { display:flex; gap:10px; padding:16px 20px 0; }
+.sheet .clear { flex:1; height:48px; border-radius:20px; border:1.5px solid var(--np-thread); background:#fff; font-size:.92rem; font-weight:500; font-family:inherit; cursor:pointer; }
+.sheet .apply { flex:2; height:48px; border-radius:20px; border:none; background:var(--np-main); color:#fff; font-size:.92rem; font-weight:600; font-family:inherit; cursor:pointer; }
+
+.sort-wrap 
+
 .sort-dir { height: 44px; padding: 0 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: .95rem; }
 .sort-dir:hover { border-color: var(--np-accent); }
 .btn-add { height: 44px; padding: 0 20px; border-radius: 20px; border: 0; background: var(--np-deep); color: #fff; font-size: .72rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background .18s; }
 .btn-add:hover { background: var(--np-mid); }
 
 /* ── INLINE FILTER ROWS ── */
-.filter-rows { padding: 14px 40px 0; display: flex; flex-direction: column; gap: 8px; }
-.filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.filter-label { font-size: .63rem; text-transform: uppercase; letter-spacing: .09em; color: var(--dim); margin-right: 2px; flex-shrink: 0; min-width: 52px; }
-.filter-row .filter-select { height: 38px; font-size: .75rem; }
+
+
+
+.filter-row 
 
 /* ── CHIPS + RESULTS NOTE ── */
 .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 40px 0; }
@@ -314,35 +338,25 @@ main { width: min(1180px, 100%); margin: 0 auto; padding: 0 0 80px; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input type="text" id="search" placeholder="Search characters, series or notes" oninput="onSearchInput()">
     </div>
-    <div class="sort-wrap">
-      <select class="filter-select" id="sort-field" onchange="setSort(this.value)" aria-label="Sort field">
-        <option value="character">Character</option>
-        <option value="series">Series</option>
-        <option value="line">Line</option>
-        <option value="issueDate">Release date</option>
-      </select>
-      <button class="sort-dir" id="sort-dir" onclick="toggleSortDir()" aria-label="Toggle sort direction">↑</button>
+    <div class="ubar">
+      <button class="ubtn" id="filters-btn" onclick="openFilterSheet()">&#9776; Filters <span class="cnt" id="filter-count" hidden></span></button>
+      <button class="ubtn" id="sort-btn" onclick="openFilterSheet('sort')">&#8645; <span id="sort-label">Character</span></button>
+      <button class="ubtn add" onclick="openForm()">+ Add</button>
     </div>
-    <button class="btn-add" onclick="openForm()">+ Add figure</button>
+    <div class="chips" id="active-chips"></div>
   </div>
 
-  <div class="filter-rows">
-    <div class="filter-row">
-      <span class="filter-label">Series</span>
-      <select class="filter-select" id="f-series" onchange="setSeries(this.value)"></select>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label">Status</span>
-      <select class="filter-select" id="f-status" onchange="setStatus(this.value)">
-        <option value="All">All</option>
-        <option value="displayed">Displayed</option>
-        <option value="stored">Stored</option>
-        <option value="wishlist">Wishlist</option>
-      </select>
+  <div class="sheet-backdrop" id="filter-backdrop" onclick="closeFilterSheet()" hidden>
+    <div class="sheet" onclick="event.stopPropagation()" role="dialog" aria-label="Filters">
+      <div class="sh-head"><b>Filters</b><button class="sh-x" onclick="closeFilterSheet()" aria-label="Close">&times;</button></div>
+      <div class="sec" id="sheet-sort-sec"><h5>SORT BY</h5><div class="opts" id="sheet-sort"></div></div>
+      <div class="sec"><h5>SERIES</h5><div class="opts" id="sheet-series"></div></div>
+      <div class="sec"><h5>STATUS</h5><div class="opts" id="sheet-status"></div></div>
+      <div class="sh-foot"><button class="clear" onclick="clearFilters()">Clear all</button><button class="apply" id="sheet-apply" onclick="closeFilterSheet()">Show items</button></div>
     </div>
   </div>
 
-  <div class="chips" id="chips"></div>
+  
   <div class="results-note" id="results-note"></div>
 
   <section class="figure-grid" id="grid" aria-label="Figure collection"></section>
@@ -763,23 +777,70 @@ function renderSeriesOptions() {
   const pool = activeLine === 'All' ? figures : figures.filter(f => f.line === activeLine);
   const opts = ['All series', ...Array.from(new Set(pool.map(f => f.series).filter(Boolean))).sort((a,b) => a.localeCompare(b))];
   if (!opts.includes(activeSeries)) activeSeries = 'All series';
-  document.getElementById('f-series').innerHTML = opts.map(s => `<option value="${esc(s)}"${s === activeSeries ? ' selected' : ''}>${esc(s)}</option>`).join('');
+  var sbox = document.getElementById('sheet-series');
+  if (sbox) sbox.innerHTML = opts.map(s => `<button class="opt${s === activeSeries ? ' on' : ''}" onclick="setSeries('${esc(s).replace(/'/g, "\\'")}')">${esc(s)}</button>`).join('');
   document.getElementById('series-list').innerHTML = opts.filter(s => s !== 'All series').map(s => `<option value="${esc(s)}">`).join('');
 }
-function setSeries(v) { activeSeries = v; renderChips(); renderGrid(); }
-function setStatus(v) { activeStatus = v; renderChips(); renderGrid(); }
+function setSeries(v) { activeSeries = v; syncSheet(); renderChips(); renderGrid(); }
+function setStatus(v) { activeStatus = v; syncSheet(); renderChips(); renderGrid(); }
+function syncPillWidths() {
+  var pills = Array.from(document.querySelectorAll('.ubar .ubtn'));
+  if (!pills.length) return;
+  pills.forEach(p => { p.style.width = ''; });
+  var w = Math.max.apply(null, pills.map(p => p.scrollWidth));
+  pills.forEach(p => { p.style.width = (w + 2) + 'px'; });
+}
+window.addEventListener('resize', function(){ syncPillWidths(); });
+function syncSheet() {
+  var sbox = document.getElementById('sheet-series');
+  if (sbox) Array.from(sbox.children).forEach(b => {
+    var v = b.textContent; b.classList.toggle('on', v === activeSeries);
+  });
+  var tbox = document.getElementById('sheet-status');
+  if (tbox) Array.from(tbox.children).forEach(b => {
+    b.classList.toggle('on', b.dataset.v === activeStatus);
+  });
+  var sobox = document.getElementById('sheet-sort');
+  if (sobox) Array.from(sobox.children).forEach(b => {
+    b.classList.toggle('on', b.dataset.v === sortField);
+  });
+  var sl = document.getElementById('sort-label');
+  if (sl) sl.textContent = {character:'Character', series:'Series', line:'Line', issueDate:'Release date'}[sortField] || 'Character';
+}
+function buildSheet() {
+  var tbox = document.getElementById('sheet-status');
+  if (tbox && !tbox.children.length) {
+    tbox.innerHTML = [['All','All'],['displayed','Displayed'],['stored','Stored'],['wishlist','Wishlist']]
+      .map(([v,l]) => `<button class="opt" data-v="${v}" onclick="setStatus('${v}')">${l}</button>`).join('');
+  }
+  var sobox = document.getElementById('sheet-sort');
+  if (sobox && !sobox.children.length) {
+    sobox.innerHTML = [['character','Character'],['series','Series'],['line','Line'],['issueDate','Release date']]
+      .map(([v,l]) => `<button class="opt" data-v="${v}" onclick="setSort('${v}')">${l}</button>`).join('');
+  }
+  syncSheet();
+}
+function openFilterSheet() { buildSheet(); syncSheet(); renderChips(); document.getElementById('filter-backdrop').hidden = false; document.body.style.overflow = 'hidden'; }
+function closeFilterSheet() { document.getElementById('filter-backdrop').hidden = true; document.body.style.overflow = ''; }
+function clearFilters() {
+  activeSeries = 'All series'; activeStatus = 'All';
+  document.getElementById('search').value = '';
+  syncSheet(); renderChips(); renderGrid();
+}
 function onSearchInput() { renderChips(); renderGrid(); }
 
 // ── Sort ──
 function setSort(field) {
   sortField = field;
   sortDir = SORTS[field].dir;
-  document.getElementById('sort-dir').textContent = sortDir === 1 ? '↑' : '↓';
-  renderGrid();
+  var d = document.getElementById('sort-dir');
+  if (d) d.textContent = sortDir === 1 ? '↑' : '↓';
+  syncSheet(); renderChips(); renderGrid();
 }
 function toggleSortDir() {
   sortDir = -sortDir;
-  document.getElementById('sort-dir').textContent = sortDir === 1 ? '↑' : '↓';
+  var d = document.getElementById('sort-dir');
+  if (d) d.textContent = sortDir === 1 ? '↑' : '↓';
   renderGrid();
 }
 
@@ -787,16 +848,25 @@ function toggleSortDir() {
 function renderChips() {
   const chips = [];
   const q = (document.getElementById('search').value || '').trim();
-  if (activeLine !== 'All') chips.push({ label: 'Line: ' + activeLine, clear: () => setLine('All') });
-  if (activeSeries !== 'All series') chips.push({ label: 'Series: ' + activeSeries, clear: () => { activeSeries = 'All series'; renderSeriesOptions(); renderChips(); renderGrid(); } });
-  if (activeStatus !== 'All') chips.push({ label: 'Status: ' + STATUS_LABEL[activeStatus], clear: () => { activeStatus = 'All'; document.getElementById('f-status').value = 'All'; renderChips(); renderGrid(); } });
-  if (q) chips.push({ label: 'Search: ' + q, clear: () => { document.getElementById('search').value = ''; renderChips(); renderGrid(); } });
+  if (activeLine !== 'All') chips.push({ label: activeLine, clear: () => setLine('All') });
+  if (activeSeries !== 'All series') chips.push({ label: activeSeries, clear: () => { activeSeries = 'All series'; syncSheet(); renderChips(); renderGrid(); } });
+  if (activeStatus !== 'All') chips.push({ label: STATUS_LABEL[activeStatus], clear: () => { activeStatus = 'All'; syncSheet(); renderChips(); renderGrid(); } });
+  if (q) chips.push({ label: '“' + q + '”', clear: () => { document.getElementById('search').value = ''; renderChips(); renderGrid(); } });
   window._chipClears = chips.map(c => c.clear);
-  document.getElementById('chips').innerHTML = chips.map((c, i) =>
-    `<button class="chip" onclick="_chipClears[${i}]()">${esc(c.label)} ×</button>`).join('');
+  const box = document.getElementById('active-chips');
+  if (box) box.innerHTML = chips.map((c, i) =>
+    `<span class="chip">${esc(c.label)}<button onclick="_chipClears[${i}]()" aria-label="Clear">×</button></span>`).join('');
+  const legacy = document.getElementById('chips');
+  if (legacy) legacy.innerHTML = '';
   const n = filteredFigures().length;
-  document.getElementById('results-note').textContent =
-    chips.length ? `Showing ${n} of ${figures.length}` : '';
+  const note = document.getElementById('results-note');
+  if (note) note.textContent = chips.length ? `Showing ${n} of ${figures.length}` : '';
+  const badge = document.getElementById('filter-count');
+  const fcount = (activeSeries !== 'All series' ? 1 : 0) + (activeStatus !== 'All' ? 1 : 0);
+  if (badge) { badge.hidden = !fcount; badge.textContent = fcount; }
+  const apply = document.getElementById('sheet-apply');
+  if (apply) apply.textContent = `Show ${n} item${n === 1 ? '' : 's'}`;
+  syncPillWidths();
 }
 
 // ── Grid ──
