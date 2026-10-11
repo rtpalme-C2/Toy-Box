@@ -820,8 +820,8 @@ function buildSheet() {
   }
   syncSheet();
 }
-function openFilterSheet() { buildSheet(); syncSheet(); renderChips(); document.getElementById('filter-backdrop').hidden = false; document.body.style.overflow = 'hidden'; }
-function closeFilterSheet() { document.getElementById('filter-backdrop').hidden = true; document.body.style.overflow = ''; }
+function openFilterSheet() { buildSheet(); syncSheet(); renderChips(); var bd = document.getElementById('filter-backdrop'); bd.hidden = false; bd.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeFilterSheet() { var bd = document.getElementById('filter-backdrop'); bd.hidden = true; bd.classList.remove('open'); document.body.style.overflow = ''; }
 function clearFilters() {
   activeSeries = 'All series'; activeStatus = 'All';
   document.getElementById('search').value = '';
